@@ -1,4 +1,13 @@
 # Unix-wc-clone
+# Run the code
+
+1. Checkout this repo on to your workspace. 
+2. Run the following command at the root level of directory to build the executable (jar)
+3. `mvn clean install`
+4. The JAR gets created in the target dir of your project, now run your jar
+5. `java -jar target/<JAR-file-name>.jar ccwc <flags> <file>`
+
+# Requirements
 The functional requirements for wc are concisely described by it’s man page - give it a go in your local terminal now:
 
 `man wc`
@@ -6,11 +15,9 @@ The functional requirements for wc are concisely described by it’s man page - 
 The TL/DR version is: wc – word, line, character, and byte count.
 
 ## Step Zero
-Like all good software engineering we’re zero indexed! In this step you’re going to set your environment up ready to begin developing and testing your solution.
+Install Java, Maven, Intellij or your favourite IDE.
 
-I’ll leave you to setup your IDE / editor of choice and programming language of choice. After that here’s what I’d like you to do to be ready to test your solution.
-
-Download the this text from Project Gutenberg and save it as test.txt.
+Download  this [text from Project Gutenberg](https://www.gutenberg.org/cache/epub/132/pg132.txt) and save it as test.txt.
 
 ## Step One
 In this step your goal is to write a simple version of wc, let’s call it ccwc (cc for Coding Challenges) that takes the command line option -c and outputs the number of bytes in a file.
