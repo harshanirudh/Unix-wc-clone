@@ -15,7 +15,11 @@ public class LinesHandler implements AbstractRequestHandler {
     public void handle(Request req, Response res) {
 //        System.out.println("*********** Inside Lines handler ********");
         try {
-            int lineCount= Files.readAllLines(Path.of(req.getFiles().get(0))).size();
+            int lineCount;
+            if(!req.isReadFromPipedData())
+                lineCount= Files.readAllLines(Path.of(req.getFiles().get(0))).size();
+            else
+                lineCount= (int) (req.getPipedData().chars().map(c->(char)c).filter(c->c=='\n').count());
             res.getSb().append("\t").append(lineCount);
         } catch (IOException e) {
             throw new RuntimeException(e);

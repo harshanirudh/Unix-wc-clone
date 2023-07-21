@@ -7,8 +7,8 @@ public class ResultHandler implements AbstractRequestHandler {
     private AbstractRequestHandler next;
     @Override
     public void handle(Request req, Response res) {
-
-        res.getSb().append("\t").append(req.getFiles().get(0));
+        if(req.getFiles()!=null && !req.getFiles().isEmpty())
+            res.getSb().append("\t").append(req.getFiles().get(0));
         System.out.println(res.getSb().toString().trim());
 
     }

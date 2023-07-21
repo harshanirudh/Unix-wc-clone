@@ -25,6 +25,7 @@ public class CheckCommandHandler implements AbstractRequestHandler {
         if (!cmd[0].equalsIgnoreCase("CCWC")) {
             throw new RuntimeException("Operation not supported");
         }
+
         BytesHandler bytesHandler = new BytesHandler();
         LinesHandler linesHandler = new LinesHandler();
         WordsHandler wordsHandler = new WordsHandler();
@@ -32,11 +33,12 @@ public class CheckCommandHandler implements AbstractRequestHandler {
         ResultHandler resultHandler = new ResultHandler();
         Set<String> options = null;
         try {
-            options = getOptionsSelected(cmd);
+            options = getOptionsSelected(req);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        if(req.isReadFromPipedData() && req.getFiles()!=null && !req.getFiles().isEmpty())
+            throw new RuntimeException("Invalid parameters, either pass file or piped data");
         RequestChainBuilder reqChain=new RequestChainBuilder(this);
         for (String option:options){
             if(option.equals(OptionConstants.LINES)) {
@@ -57,7 +59,8 @@ public class CheckCommandHandler implements AbstractRequestHandler {
 
     }
 
-    private Set<String> getOptionsSelected(String[] cmd) throws IOException {
+    private Set<String> getOptionsSelected(Request req) throws IOException {
+        String[] cmd = req.getCmd();
         Set<String> result = new HashSet<>();
         for (int i = 1; i < cmd.length; i++) {
             if (i == 1 && !cmd[i].startsWith("-")) {
@@ -83,6 +86,11 @@ public class CheckCommandHandler implements AbstractRequestHandler {
             } else if (cmd[i].equals("-m")) {
                 result.add(OptionConstants.CHARS);
             }
+        }
+        if(result.size()==0 && req.isReadFromPipedData()){
+            result.add(OptionConstants.LINES);
+            result.add(OptionConstants.BYTES);
+            result.add(OptionConstants.WORDS);
         }
         return result;
     }

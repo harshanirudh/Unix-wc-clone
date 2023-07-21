@@ -13,18 +13,23 @@ public class WordsHandler implements AbstractRequestHandler {
 
     @Override
     public void handle(Request req, Response res) {
+        int wordCount;
+        if(!req.isReadFromPipedData()) {
+            try (var reader = Files.newBufferedReader(Path.of(req.getFiles().get(0)));) {
+                 wordCount = (int) reader
+                        .lines()
+                        .map(line -> line.split("\\s+"))
+                        .flatMap(Arrays::stream)
+                        .filter(word -> !word.isEmpty())
+                        .count();
 
-        try (var reader = Files.newBufferedReader(Path.of(req.getFiles().get(0)));) {
-            var wordCount = reader
-                    .lines()
-                    .map(line -> line.split("\\s+"))
-                    .flatMap(Arrays::stream)
-                    .filter(word -> !word.isEmpty())
-                    .count();
-            res.getSb().append("\t").append(wordCount);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            wordCount=req.getPipedData().toString().trim().split("\\s+").length;
         }
+        res.getSb().append("\t").append(wordCount);
         this.next.handle(req, res);
     }
 

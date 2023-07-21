@@ -14,7 +14,11 @@ public class BytesHandler implements AbstractRequestHandler {
     public void handle(Request req, Response res){
 //        System.out.println("*********** Inside Bytes handler ********");
         try {
-            int bytesCount=Files.readAllBytes(Path.of(req.getFiles().get(0))).length;
+            int bytesCount;
+            if(!req.isReadFromPipedData())
+                 bytesCount=Files.readAllBytes(Path.of(req.getFiles().get(0))).length;
+            else
+                bytesCount=req.getPipedData().toString().getBytes().length;
             res.getSb().append("\t").append(bytesCount);
         } catch (IOException e) {
             throw new RuntimeException(e);
