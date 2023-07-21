@@ -6,7 +6,8 @@
 3. `mvn clean install`
 4. The JAR gets created in the target dir of your project, now run your jar
 5. `java -jar target/<JAR-file-name>.jar ccwc <flags> <file>`
-
+6. To send piped data, just pass the data like example below
+7. `cat ../test.txt |java -jar target/CodingChallengeWC-1.0-SNAPSHOT.jar ccwc -l -w -c`
 # Requirements
 The functional requirements for wc are concisely described by it’s man page - give it a go in your local terminal now:
 
